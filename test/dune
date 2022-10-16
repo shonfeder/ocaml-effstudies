@@ -1,2 +1,13 @@
-(test
- (name effstudies))
+(cram
+ (deps ioeff.exe
+       nondeteff.exe))
+
+(executable
+ (public_name ioeff)
+ (modules ioeff)
+ (libraries effstudies))
+
+(executable
+ (public_name nondeteff)
+ (modules nondeteff)
+ (libraries effstudies))

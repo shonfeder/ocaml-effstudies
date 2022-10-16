@@ -14,7 +14,7 @@
  (description "Longer description")
  (depends
   (dune (>= 2.9))
-  (ocaml (= 5.0.0+trunk))
+  ocaml
   (alcotest :with-test)
   (qcheck :with-test)
   (qcheck-alcotest :with-test)
