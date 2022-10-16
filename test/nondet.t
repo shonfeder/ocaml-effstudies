@@ -5,4 +5,5 @@
   $ nondeteff choose-false
   -5
 
-  $ nondeteff choose-max
+Impossible to run this command
+$ nondeteff choose-max
