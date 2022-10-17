@@ -62,7 +62,7 @@ module State (S : sig type t end) = struct
   end
 end
 
-let%test_module "updating integer state" = (module struct
+let%test_module "integer state" = (module struct
   module IntState = State(Int)
 
   let incr () =
@@ -99,7 +99,10 @@ let%test_module "updating integer state" = (module struct
   let%test "collecting a trace of counter states" =
     let init = 0 in
     let init_trace = [init] in
-    let program () = () |> incr_twice |> decr_twice in
+    let program () =
+      incr_twice ();
+      decr_twice ()
+    in
     (* Here we compose the `Update.handler` with the `Trace.handler`.
        The `Trace.handler` must be the inner handler, or else the
        `Update.handler` will consume the update without propagating it. *)
@@ -108,4 +111,39 @@ let%test_module "updating integer state" = (module struct
     in
     init = end_state && trace = [0; 1; 2; 1; 0]
 
+end)
+
+let%test_module "record state" = (module struct
+  module Vars = struct
+    type t = {x : int; y : string}
+  end
+  module RecState = State (Vars)
+
+  let incr () =
+    let open RecState in
+    let s = get () in
+    set {s with x = s.x + 1}
+
+  let concat str =
+    let open RecState in
+    let s = get () in
+    set {s with y = s.y ^ str}
+
+  let%test "collecting a trace of state updates states" =
+    let init : Vars.t = {x = 0; y = "a"} in
+    let init_trace = [init] in
+    let program () =
+      incr ();
+      concat "b"
+    in
+    (* Here we compose the `Update.handler` with the `Trace.handler`.
+       The `Trace.handler` must be the inner handler, or else the
+       `Update.handler` will consume the update without propagating it. *)
+    let (((), trace), _) =
+      (RecState.Update.handler @@ fun () -> RecState.Trace.handler program () init_trace) () init
+    in
+    trace = [ {x = 0; y = "a"}
+            ; {x = 1; y = "a"}
+            ; {x = 1; y = "ab"}
+            ]
 end)
