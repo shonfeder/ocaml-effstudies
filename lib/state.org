@@ -1,0 +1,42 @@
+#+TITLE: State Effects
+
+* State (Section 2.4)
+:PROPERTIES:
+:header-args:tuareg: :tangle state.ml :comments both :session state-example
+:END:
+
+We'll load up some imports
+
+#+begin_src tuareg
+module Eff = Effect
+let continue = Eff.Deep.continue
+open EffTypes
+#+end_src
+
+** The main module
+
+#+begin_src tuareg
+module State = struct
+
+type _ Eff.t +=
+  | Get : 'a Eff.t
+  | Set : 'a -> unit Eff.t
+#+end_src
+
+** State updates
+
+#+begin_src tuareg
+module Update = struct
+
+  let handler =
+
+end
+#+end_src
+
+** Wrapping up
+
+Close the =State= module
+
+#+begin_src tuareg
+end
+#+end_src

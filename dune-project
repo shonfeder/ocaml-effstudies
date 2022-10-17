@@ -15,6 +15,8 @@
  (depends
   (dune (>= 2.9))
   ocaml
+  (ppx_inline_test :with-test)
+  (ppx_expect :with-test)
   (alcotest :with-test)
   (qcheck :with-test)
   (qcheck-alcotest :with-test)

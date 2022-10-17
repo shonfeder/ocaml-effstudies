@@ -13,7 +13,7 @@ end
 
 module Handler = struct
   open E
-  open EffTypes
+      open EffTypes
 
   (** The base handler for the print effect, finally delegates printing to an IO operation *)
   let print : ('a, 'b) handler =

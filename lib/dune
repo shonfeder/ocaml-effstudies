@@ -1,2 +1,20 @@
 (library
- (name effstudies))
+ (name effstudies)
+ (inline_tests)
+ (preprocess (pps ppx_inline_test))
+)
+
+; TODO: build role is not robust accross environments
+; (rule
+;  (target state.ml)
+;  (deps state.org)
+;  (action (run
+;           emacs -Q --batch --eval
+;           "(progn
+;            (add-to-list 'load-path \"~/.emacs.d/.local/straight/repos/tuareg/\")
+;            (require 'ob-tangle)
+;            (require 'tuareg)
+;            (dolist (file command-line-args-left)
+;              (with-current-buffer (find-file-noselect file)
+;                (org-babel-tangle))))"
+;           %{deps})))
