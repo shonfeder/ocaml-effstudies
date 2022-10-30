@@ -1,6 +1,6 @@
 (* We'll load up some imports *)
 
-(** Adatting from
+(** Adapting from
 
    - https://github.com/ocamllabs/ocaml-effects-tutorial#2-effectful-computations-in-a-pure-setting
    - www.eff-lang.org/handlers-tutorial.pdf pp. 8-9
@@ -11,18 +11,27 @@ module Eff = Effect
 open Eff.Deep
 open EffTypes
 
-module type State = sig
+
+type ('a, 't) state_handler = ('a, 't -> ('a * 't)) handler
+
+module type STATE = sig
   type t
+
   val set : t -> unit
   val get : unit -> t
 
   module Update : sig
-    val handler : ('a, t -> ('a * t)) handler
+    val handler : ('a, t) state_handler
   end
+
+  module Trace : sig
+    val handler : ('a, t list) state_handler
+  end
+
 end
 
 
-module State (S : sig type t end) = struct
+module State (S : sig type t end) : STATE with type t = S.t = struct
   type t = S.t
 
   type _ Eff.t +=
